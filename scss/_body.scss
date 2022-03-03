@@ -1,0 +1,27 @@
+// Reset css
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+#cocktail-list {
+    margin: 35px;
+    ul {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px;
+        align-items: center;
+        justify-items: center;
+        li {
+            width: 300px;
+            margin: 10px;
+            list-style: none;
+        }
+    }
+}
