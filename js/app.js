@@ -23,6 +23,8 @@ cocktails.forEach(cocktail => {
 
 let search = prompt("Ingresá el nombre del trago a buscar:");
 
-let cocktailsFinded = cocktails.filter(x => x.name.toLowerCase().includes(search.toLowerCase()));
+function searchCockatils(name) {
+    return cocktails.filter(x => x.name.toLowerCase().includes(search.toLowerCase()));
+}
 
-console.log(cocktailsFinded);
+console.log(searchCockatils(search));
