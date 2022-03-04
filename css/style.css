@@ -7,25 +7,33 @@ body {
   background-color: #f4f4f4;
   font-family: Arial, Helvetica, sans-serif; }
 
-#cocktail-list {
-  margin: 35px; }
-  #cocktail-list ul {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-    align-items: center;
-    justify-items: center; }
-    #cocktail-list ul li {
-      width: 300px;
-      margin: 10px;
-      list-style: none; }
+.title {
+  font-size: 2.5rem;
+  position: relative;
+  text-align: center;
+  color: #f4f4f4;
+  text-shadow: 0px 0px 10px black; }
+  .title img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover; }
+  .title h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); }
 
 header {
   background-color: #f9cb16;
-  padding: 5px 10px;
+  padding: 10px 10px;
   display: flex;
   flex-flow: row nowrap;
-  justify-content: space-between; }
+  justify-content: space-between;
+  position: sticky;
+  z-index: 10;
+  width: 100%;
+  top: 0px;
+  box-shadow: 0px 0px 5px black; }
   header a {
     color: black;
     text-decoration: none;
@@ -59,14 +67,44 @@ header {
       header .header-left .search input:focus {
         outline: none; }
 
+#cocktail-list {
+  margin: 5px auto;
+  width: 85%; }
+  #cocktail-list ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    justify-items: center; }
+    #cocktail-list ul li {
+      width: 100%;
+      height: max-content;
+      padding: 15px;
+      margin: 10px;
+      list-style: none; }
+
 footer {
   background-color: #0c0c0c;
   color: #f4f4f4;
   text-align: center;
   width: 100%;
-  margin: 10px auto; }
+  padding: 15px;
+  margin: 10px 0px 0px; }
 
 .cocktail-card {
   border-radius: 5px;
   padding: 10px;
-  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.363); }
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.363);
+  background-color: #f9cb16; }
+  .cocktail-card .cocktail-card-title {
+    margin: 10px;
+    padding: 5px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.37); }
+  .cocktail-card .cocktail-card-desc {
+    margin: 15px;
+    font-size: 1.5rem; }
+    .cocktail-card .cocktail-card-desc img {
+      float: left;
+      width: 150px;
+      margin: 10px 30px 10px 10px; }
+    .cocktail-card .cocktail-card-desc p {
+      line-height: 2rem; }
