@@ -17,14 +17,50 @@ const cocktails = [
     new Cocktail("Whiskey Sour", "Shake with ice. Strain into chilled glass, garnish and serve. If served 'On the rocks', strain ingredients into old-fashioned glass filled with ice.")
 ];
 
-cocktails.forEach(cocktail => {
-    console.log(cocktail.name);
-});
+let question = prompt("Deseas agregar un nuevo trago (\"agregar\") o buscar uno nuevo (\"buscar\")");
 
-let search = prompt("Ingresá el nombre del trago a buscar:");
-
-function searchCockatils(name) {
-    return cocktails.filter(x => x.name.toLowerCase().includes(search.toLowerCase()));
+while (question != "agregar" && question != "buscar") {
+    question = prompt("Deseas agregar un nuevo trago (\"agregar\") o buscar uno nuevo (\"buscar\")");
 }
 
-console.log(searchCockatils(search));
+if (question == "buscar") {
+    let search = "";
+
+    do {
+        search = prompt("Ingresá el nombre del trago a buscar:");
+    } while (search == "" || search == null);
+
+    const cocktailsFinded = searchCockatils(search);
+
+    console.log(cocktailsFinded.length > 0 ? cocktailsFinded : alert("No se han encontrado cockteles con ese nombre."));
+} else if (question == "agregar") {
+    let newCocktailName = ""
+
+    do {
+        newCocktailName = prompt("Ingresá un nombre válido!");
+    } while (newCocktailName == "" || newCocktailName == null);
+
+    let newCocktailDesc = ""
+
+    do {
+        newCocktailDesc = prompt("Ingresá una descripcion válida del Cocktail");
+    } while (newCocktailDesc == "" || newCocktailDesc == null);
+
+    addNewCocktail(newCocktailName, newCocktailDesc);
+}
+
+console.log(cocktails);
+
+
+// Functions
+function searchCockatils(name) {
+    if (name == null || name == "") return null;
+
+    return cocktails.filter(x => x.name.toLowerCase().includes(name.toLowerCase()));
+}
+
+
+function addNewCocktail(newCocktailName, newCocktailDesc) {
+    const newCocktail = new Cocktail(newCocktailName, newCocktailDesc);
+    cocktails.push(newCocktail);
+}
