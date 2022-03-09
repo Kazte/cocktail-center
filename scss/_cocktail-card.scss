@@ -1,8 +1,11 @@
 .cocktail-card {
     border-radius: 5px;
     padding: 10px;
+    margin: 10px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.363);
     background-color: #f9cb16;
+    overflow: hidden;
+    width: 100%;
     .cocktail-card-title {
         margin: 10px;
         padding: 5px;
@@ -13,11 +16,12 @@
         font-size: 1.5rem;
         img {
             float: left;
-            width: 150px;
+            width: 45%;
             margin: 10px 30px 10px 10px;
         }
         p {
             line-height: 2rem;
+            display: inline;
         }
     }
 }

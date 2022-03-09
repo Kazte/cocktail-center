@@ -25,6 +25,11 @@ body {
     left: 50%;
     transform: translate(-50%, -50%); }
 
+.center {
+  margin: auto;
+  width: 90%;
+  padding: 10px; }
+
 header {
   background-color: #f9cb16;
   padding: 10px 10px;
@@ -70,19 +75,10 @@ header {
         outline: none; }
 
 #cocktail-list {
-  margin: 5px auto;
-  width: 85%; }
-  #cocktail-list ul {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    justify-items: center; }
-    #cocktail-list ul li {
-      width: 100%;
-      height: max-content;
-      padding: 15px;
-      margin: 10px;
-      list-style: none; }
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px; }
 
 footer {
   background-color: #0c0c0c;
@@ -95,8 +91,11 @@ footer {
 .cocktail-card {
   border-radius: 5px;
   padding: 10px;
+  margin: 10px;
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.363);
-  background-color: #f9cb16; }
+  background-color: #f9cb16;
+  overflow: hidden;
+  width: 100%; }
   .cocktail-card .cocktail-card-title {
     margin: 10px;
     padding: 5px;
@@ -106,7 +105,8 @@ footer {
     font-size: 1.5rem; }
     .cocktail-card .cocktail-card-desc img {
       float: left;
-      width: 150px;
+      width: 45%;
       margin: 10px 30px 10px 10px; }
     .cocktail-card .cocktail-card-desc p {
-      line-height: 2rem; }
+      line-height: 2rem;
+      display: inline; }
