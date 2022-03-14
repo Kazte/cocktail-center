@@ -36,3 +36,14 @@ body {
     width: 90%;
     padding: 10px;
 }
+
+.flex-col {
+    display: flex;
+    flex-flow: column;
+}
+
+.flex-row {
+    width: 100%;
+    display: flex;
+    flex-flow: row;
+}

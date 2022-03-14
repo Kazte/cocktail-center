@@ -11,7 +11,7 @@
 
 <body>
     <header>
-        <div class="header-right">
+        <div class="header-left">
             <h1><a href="#">Cocktail Center</a></h1>
 
             <nav>
@@ -23,22 +23,35 @@
             </nav>
         </div>
 
-        <div class="header-left">
-            <div class="search">
-                <form action="">
-                    <input type="text" name="Cocktail" id="cocktail-search" placeholder="Search a Cocktail... " />
-                </form>
-            </div>
+        <div class="header-right">
+            <button class="btn" id="btnNewCocktail">New Cocktail</button>
+            <form id="searchCocktailForm" action="">
+                <input id="searchCocktailInput" type="search" name="Cocktail" class="input" placeholder="Search a Cocktail... " />
+            </form>
         </div>
     </header>
 
     <main>
+        <section id="new-cocktail-panel">
+            <form action="" id="newCocktailForm">
+                <h1> New Cocktail</h1>
+                <input class="input" type="text" name="new-cocktail-name" id="newCocktailNameInput" placeholder="New Cocktail Name">
+                <textarea class="input" type="text" name="new-cocktail-desc" id="newCocktailDescInput" placeholder="New Cocktail Description"></textarea>
+                <div class="flex-row">
+                    <button class="btn" id="btnSendNewCocktail" type="submit">Send</button>
+                    <button type="reset" class="btn" id="btnCancelNewCocktail">Cancel</button>
+                </div>
+            </form>
+        </section>
+
         <section class="title">
             <img src="./img/cover.jpg" alt="Cover image">
             <h1>Weekly Cocktails</h1>
         </section>
+
         <section class="center">
             <ul id="cocktail-list">
+
             </ul>
         </section>
     </main>
@@ -47,7 +60,7 @@
         <em>Copyright © 2022</em>
     </footer>
 
-    <script src="./js/app.js"></script>
+    <script type="module" src="./js/app.js"></script>
 </body>
 
 </html>

@@ -17,55 +17,45 @@ const cocktails = [
     new Cocktail("Whiskey Sour", "Shake with ice. Strain into chilled glass, garnish and serve. If served 'On the rocks', strain ingredients into old-fashioned glass filled with ice.")
 ];
 
-let cocktail_ul = document.getElementById("cocktail-list");
+const cocktail_ul = document.getElementById("cocktail-list");
 
-let question = prompt("Deseas agregar un nuevo trago (\"agregar\") o buscar uno nuevo (\"buscar\")");
+generateAllCocktails();
 
-while (question != "agregar" && question != "buscar") {
-    question = prompt("Deseas agregar un nuevo trago (\"agregar\") o buscar uno nuevo (\"buscar\")");
-}
+const bntNewCocktail = document.getElementById("btnNewCocktail");
 
-if (question == "buscar") {
-    let search = "";
+bntNewCocktail.addEventListener("click", () => {
+    openNewCocktailPanel();
 
-    do {
-        search = prompt("Ingresá el nombre del trago a buscar:");
-    } while (search == "" || search == null);
+    const newCocktailForm = document.getElementById("newCocktailForm");
 
-    const cocktailsFinded = searchCockatils(search);
+    newCocktailForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        validateNewCocktailForm(e)
+    });
 
-    if (cocktailsFinded.length <= 0) {
-        alert("No se han encontrado cockteles con ese nombre.");
+    newCocktailForm.addEventListener('reset', closeNewCocktailPanel);
+});
+
+
+const searchCocktailForm = document.getElementById("searchCocktailForm");
+searchCocktailForm.addEventListener("submit", e => e.preventDefault());
+searchCocktailForm.addEventListener("search", e => {
+    const value = e.target.value;
+    if (value.length > 0) {
+        const cocktailsSearched = searchCockatils(value);
+        clearCocktailsFromIndex();
+        cocktailsSearched.forEach(cocktail => {
+            addCocktailToIndex(cocktail);
+        });
+
+    } else {
+        generateAllCocktails();
     }
 
-    cocktailsFinded.forEach(cocktail => {
-        addCocktailToIndex(cocktail);
-    });
-
-} else if (question == "agregar") {
-    let newCocktailName = ""
-
-    do {
-        newCocktailName = prompt("Ingresá un nombre válido!");
-    } while (newCocktailName == "" || newCocktailName == null);
-
-    let newCocktailDesc = ""
-
-    do {
-        newCocktailDesc = prompt("Ingresá una descripcion válida del Cocktail");
-    } while (newCocktailDesc == "" || newCocktailDesc == null);
-
-    addNewCocktail(newCocktailName, newCocktailDesc);
-
-    cocktails.forEach(cocktail => {
-        addCocktailToIndex(cocktail);
-    });
-}
-
-// console.log(cocktails);
+});
 
 
-// // Functions
+// Functions
 function searchCockatils(name) {
     if (name == null || name == "") return null;
 
@@ -75,6 +65,7 @@ function searchCockatils(name) {
 
 function addNewCocktail(newCocktailName, newCocktailDesc) {
     const newCocktail = new Cocktail(newCocktailName, newCocktailDesc);
+    addCocktailToIndex(newCocktail);
     cocktails.push(newCocktail);
 }
 
@@ -88,4 +79,62 @@ function addCocktailToIndex(cocktail) {
                         </div>
                 </li>
                 `
+}
+
+function clearCocktailsFromIndex() {
+    cocktail_ul.innerHTML = "";
+}
+
+function openNewCocktailPanel() {
+    const newCocktailPanel = document.getElementById("new-cocktail-panel");
+    newCocktailPanel.style.display = "flex";
+    newCocktailPanel.style.opacity = "100%";
+}
+
+function closeNewCocktailPanel() {
+    const newCocktailPanel = document.getElementById("new-cocktail-panel");
+    newCocktailPanel.style.display = "none";
+    newCocktailPanel.style.opacity = "0%";
+
+    const newCocktailNameInput = document.getElementById("newCocktailNameInput");
+    const newCocktailDescInput = document.getElementById("newCocktailDescInput");
+
+    newCocktailDescInput.style.backgroundColor = "#ffffff";
+    newCocktailNameInput.style.backgroundColor = "#ffffff";
+}
+
+function validateNewCocktailForm(e) {
+    const newCocktailNameInput = document.getElementById("newCocktailNameInput");
+    const newCocktailDescInput = document.getElementById("newCocktailDescInput");
+
+    if (newCocktailNameInput.value.length > 0 && newCocktailDescInput.value.length > 0) {
+        addNewCocktail(newCocktailNameInput.value, newCocktailDescInput.value)
+
+        newCocktailNameInput.value = "";
+        newCocktailDescInput.value = "";
+        closeNewCocktailPanel();
+    } else {
+
+        newCocktailNameInput.style.backgroundColor = "#ff2300";
+
+        newCocktailDescInput.style.backgroundColor = "#ff2300";
+
+
+
+        newCocktailNameInput.addEventListener("focusin", () => {
+            newCocktailDescInput.style.backgroundColor = "#ffffff";
+            newCocktailNameInput.style.backgroundColor = "#ffffff";
+        })
+        newCocktailDescInput.addEventListener("focusin", () => {
+            newCocktailDescInput.style.backgroundColor = "#ffffff";
+            newCocktailNameInput.style.backgroundColor = "#ffffff";
+        })
+    }
+}
+
+function generateAllCocktails() {
+    clearCocktailsFromIndex();
+    cocktails.forEach(cocktail => {
+        addCocktailToIndex(cocktail);
+    });
 }
