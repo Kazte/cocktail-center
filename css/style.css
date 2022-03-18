@@ -114,9 +114,9 @@ header {
   flex-flow: column wrap;
   justify-content: space-evenly;
   align-content: space-around; }
-  #new-cocktail-panel form {
+  #new-cocktail-panel #newCocktailForm {
     width: 50%;
-    height: 50%;
+    height: fit-content;
     margin: auto;
     background-color: #f9cb16;
     border-radius: 5px;
@@ -126,12 +126,35 @@ header {
     align-items: center;
     gap: 20px;
     padding: 25px; }
-    #new-cocktail-panel form textarea {
-      height: 100%;
-      resize: vertical; }
-    #new-cocktail-panel form .flex-row {
+    #new-cocktail-panel #newCocktailForm textarea {
+      height: 200px;
+      resize: none; }
+    #new-cocktail-panel #newCocktailForm .flex-row {
       justify-content: space-evenly;
       gap: 25px; }
+    #new-cocktail-panel #newCocktailForm ul {
+      width: 100%; }
+      #new-cocktail-panel #newCocktailForm ul li {
+        list-style: none; }
+        #new-cocktail-panel #newCocktailForm ul li input {
+          border: none;
+          padding: 10px;
+          margin: 10px 0px; }
+          #new-cocktail-panel #newCocktailForm ul li input:focus {
+            outline: none; }
+        #new-cocktail-panel #newCocktailForm ul li button {
+          background-color: #f4f4f4;
+          padding: 10px;
+          color: black;
+          width: 15%;
+          height: 100%;
+          border-radius: 0px;
+          border: none;
+          font-weight: 600;
+          cursor: pointer; }
+          #new-cocktail-panel #newCocktailForm ul li button:hover {
+            background-color: black;
+            color: #f4f4f4; }
 
 footer {
   background-color: #0c0c0c;
@@ -148,7 +171,9 @@ footer {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.363);
   background-color: #f9cb16;
   overflow: hidden;
-  width: 100%; }
+  width: 100%;
+  display: flex;
+  flex-flow: column; }
   .cocktail-card .cocktail-card-title {
     margin: 10px;
     padding: 5px;
@@ -163,6 +188,10 @@ footer {
     .cocktail-card .cocktail-card-desc p {
       line-height: 2rem;
       display: inline; }
+  .cocktail-card .cocktail-card-ingredients {
+    padding: 10px;
+    font-size: 1.5rem;
+    list-style: none; }
 
 .btn {
   background-color: #f4f4f4;

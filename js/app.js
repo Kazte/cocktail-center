@@ -1,21 +1,36 @@
 class Cocktail {
     name = ""
     description = ""
+    ingredients = []
+    thumbnail = ""
 
-    constructor(name, description) {
+    constructor(name, description, ingredients, thumbnail) {
         this.name = name;
         this.description = description;
+        this.ingredients = ingredients;
+        this.thumbnail = thumbnail;
     }
 }
 
-const cocktails = [
-    new Cocktail("Margarita", "Rub the rim of the glass with the lime slice to make the salt stick to it. Take care to moisten only the outer rim and sprinkle the salt on it. The salt should present to the lips of the imbiber and never mix into the cocktail. Shake the other ingredients with ice, then carefully pour into the glass."),
-    new Cocktail("Cuba Libre", "Build all ingredients in a Collins glass filled with ice. Garnish with lime wedge."),
-    new Cocktail("Martini", "Straight: Pour all ingredients into mixing glass with ice cubes. Stir well. Strain in chilled martini cocktail glass. Squeeze oil from lemon peel onto the drink, or garnish with olive."),
-    new Cocktail("Kiwi Martini", "You'll simply muddle slices of kiwi with simple syrup, then shake it with vodka. It's a drink that anyone can mix up in minutes and a perfect cocktail to show off your favorite vodka."),
-    new Cocktail("Mojito", "Muddle mint leaves with sugar and lime juice. Add a splash of soda water and fill the glass with cracked ice. Pour the rum and top with soda water. Garnish and serve with straw."),
-    new Cocktail("Whiskey Sour", "Shake with ice. Strain into chilled glass, garnish and serve. If served 'On the rocks', strain ingredients into old-fashioned glass filled with ice.")
-];
+const cocktails = [];
+
+import { data } from "./../data/data.js";
+
+data.cocktails.forEach(cocktail => {
+    const newCocktail = new Cocktail(cocktail.name, cocktail.description, cocktail.ingredients, cocktail.thumbnail)
+    cocktails.push(newCocktail);
+});
+
+const dataFromLocalStorage = localStorage.getItem("customCocktails") || null;
+
+if (dataFromLocalStorage) {
+    let localStored = JSON.parse(localStorage.getItem("customCocktails"));
+
+    for (const cocktail of localStored["cocktails"]) {
+        const newCocktail = new Cocktail(cocktail.name, cocktail.description, cocktail.ingredients, cocktail.thumbnail)
+        cocktails.push(newCocktail);
+    }
+}
 
 const cocktail_ul = document.getElementById("cocktail-list");
 
@@ -26,14 +41,67 @@ const bntNewCocktail = document.getElementById("btnNewCocktail");
 bntNewCocktail.addEventListener("click", () => {
     openNewCocktailPanel();
 
-    const newCocktailForm = document.getElementById("newCocktailForm");
+    const newCocktailFormSend = document.getElementById("btnSendNewCocktail");
+    const newCocktailFormReset = document.getElementById("btnCancelNewCocktail");
 
-    newCocktailForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        validateNewCocktailForm(e)
+    const ingredientsList = document.getElementById("new-cocktail-ingredients-list");
+    const newIngredientBtn = document.getElementById("new-cocktail-add-ingredient");
+
+    newIngredientBtn.addEventListener("click", e => {
+        if (ingredientsList.children.length > 7) return;
+
+        const newIngredientListItem = document.createElement("li");
+        newIngredientListItem.className = "new-cocktail-ingredient";
+
+        newIngredientListItem.innerHTML = `
+                        <input type="text" name="new-cocktail-ingredient-name" id="newCocktailIngredientNameInput" placeholder="Ingredient Name">
+                        <input type="text" name="new-cocktail-ingredient-measure" id="newCocktailIngredientMeasureInput" placeholder="Ingredient Measure">
+                        `
+
+        const btn = document.createElement("button");
+        btn.innerHTML = `x`;
+        btn.id = "new-cocktail-delete-ingredient";
+        btn.addEventListener("click", e => {
+            const toRemove = e.target.parentNode;
+
+            ingredientsList.removeChild(toRemove);
+        });
+
+        newIngredientListItem.appendChild(btn);
+
+        ingredientsList.appendChild(newIngredientListItem);
+    })
+
+
+
+    newCocktailFormSend.addEventListener('click', (e) => {
+
+        const newCocktailNameInput = document.getElementById("newCocktailNameInput");
+        const newCocktailDescInput = document.getElementById("newCocktailDescInput");
+
+        const ingredients = []
+
+
+        for (const child of ingredientsList.children) {
+
+            const iName = child.children[0].value;
+            const iMeasure = child.children[1].value;
+
+            if (iName.length <= 0 || iMeasure.length <= 0) return;
+
+            ingredients.push({ "name": iName, "measure": iMeasure });
+        }
+
+        if (newCocktailNameInput.value.length > 0 && newCocktailDescInput.value.length > 0) {
+            addNewCocktail(newCocktailNameInput.value, newCocktailDescInput.value, ingredients, "./../img/whiskey_sour_thumb.jpg");
+
+            newCocktailNameInput.value = "";
+            newCocktailDescInput.value = "";
+            closeNewCocktailPanel();
+        }
     });
 
-    newCocktailForm.addEventListener('reset', closeNewCocktailPanel);
+    newCocktailFormReset.addEventListener('click', closeNewCocktailPanel);
 });
 
 
@@ -63,22 +131,41 @@ function searchCockatils(name) {
 }
 
 
-function addNewCocktail(newCocktailName, newCocktailDesc) {
-    const newCocktail = new Cocktail(newCocktailName, newCocktailDesc);
+function addNewCocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail) {
+    const newCocktail = new Cocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail);
+    saveCocktailToLocalStorage(newCocktail);
     addCocktailToIndex(newCocktail);
     cocktails.push(newCocktail);
 }
 
 function addCocktailToIndex(cocktail) {
-    cocktail_ul.innerHTML += `
-                <li class="cocktail-card">
-                        <h1 class="cocktail-card-title">${cocktail.name}</h1>
-                        <div class="cocktail-card-desc">
-                            <img src="./img/whiskey_sour_thumb.jpg" alt="Whiskey Sour Thumbnail">
-                            <p>${cocktail.description}</p>
-                        </div>
-                </li>
-                `
+    let newCocktailHTML = document.createElement("li");
+    newCocktailHTML.className = "cocktail-card"
+    newCocktailHTML.innerHTML +=
+        `
+        <h1 class="cocktail-card-title">${cocktail.name}</h1>
+
+        <div class="cocktail-card-desc">
+            <img src="${cocktail.thumbnail}" alt="Whiskey Sour Thumbnail">
+            <p>${cocktail.description}</p>
+        </div>
+
+        <h1 class="cocktail-card-title">Ingredients</h1>    
+        `
+
+    let ingredients_ul = document.createElement("ul");
+    ingredients_ul.className = "cocktail-card-ingredients";
+
+    newCocktailHTML.appendChild(ingredients_ul);
+
+    cocktail.ingredients.forEach(ing => {
+        let newIngredient = document.createElement("li");
+        newIngredient.className = "cocktail-card-ingredient";
+        newIngredient.innerText = `${ing.name}: ${ing.measure===""?"Fill with":ing.measure}`;
+        ingredients_ul.appendChild(newIngredient);
+    });
+
+    cocktail_ul.appendChild(newCocktailHTML);
 }
 
 function clearCocktailsFromIndex() {
@@ -104,32 +191,7 @@ function closeNewCocktailPanel() {
 }
 
 function validateNewCocktailForm(e) {
-    const newCocktailNameInput = document.getElementById("newCocktailNameInput");
-    const newCocktailDescInput = document.getElementById("newCocktailDescInput");
 
-    if (newCocktailNameInput.value.length > 0 && newCocktailDescInput.value.length > 0) {
-        addNewCocktail(newCocktailNameInput.value, newCocktailDescInput.value)
-
-        newCocktailNameInput.value = "";
-        newCocktailDescInput.value = "";
-        closeNewCocktailPanel();
-    } else {
-
-        newCocktailNameInput.style.backgroundColor = "#ff2300";
-
-        newCocktailDescInput.style.backgroundColor = "#ff2300";
-
-
-
-        newCocktailNameInput.addEventListener("focusin", () => {
-            newCocktailDescInput.style.backgroundColor = "#ffffff";
-            newCocktailNameInput.style.backgroundColor = "#ffffff";
-        })
-        newCocktailDescInput.addEventListener("focusin", () => {
-            newCocktailDescInput.style.backgroundColor = "#ffffff";
-            newCocktailNameInput.style.backgroundColor = "#ffffff";
-        })
-    }
 }
 
 function generateAllCocktails() {
@@ -137,4 +199,21 @@ function generateAllCocktails() {
     cocktails.forEach(cocktail => {
         addCocktailToIndex(cocktail);
     });
+}
+
+function saveCocktailToLocalStorage(cocktail) {
+    const stringed = JSON.stringify(cocktail);
+
+    const localStorageCocktails = localStorage.getItem("customCocktails") || null;
+
+    if (localStorageCocktails) {
+        let localStored = JSON.parse(localStorage.getItem("customCocktails"));
+
+        localStored["cocktails"].push(JSON.parse(stringed));
+
+        localStorage.setItem("customCocktails", JSON.stringify(localStored))
+    } else {
+        const newToStorage = `{"cocktails":[${stringed}]}`;
+        localStorage.setItem("customCocktails", newToStorage);
+    }
 }

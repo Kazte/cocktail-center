@@ -33,15 +33,29 @@
 
     <main>
         <section id="new-cocktail-panel">
-            <form action="" id="newCocktailForm">
+            <div id="newCocktailForm">
                 <h1> New Cocktail</h1>
+
                 <input class="input" type="text" name="new-cocktail-name" id="newCocktailNameInput" placeholder="New Cocktail Name">
+
                 <textarea class="input" type="text" name="new-cocktail-desc" id="newCocktailDescInput" placeholder="New Cocktail Description"></textarea>
+
+                <ul id="new-cocktail-ingredients-list">
+                    <li class="new-cocktail-ingredient">
+                        <input type="text" name="new-cocktail-ingredient-name" id="newCocktailIngredientNameInput" placeholder="Ingredient Name">
+                        <input type="text" name="new-cocktail-ingredient-measure" id="newCocktailIngredientMeasureInput" placeholder="Ingredient Measure">
+                    </li>
+                </ul>
+
                 <div class="flex-row">
-                    <button class="btn" id="btnSendNewCocktail" type="submit">Send</button>
+                    <button class="btn" id="new-cocktail-add-ingredient">+</button>
+                </div>
+
+                <div class="flex-row">
+                    <button class="btn" id="btnSendNewCocktail">Send</button>
                     <button type="reset" class="btn" id="btnCancelNewCocktail">Cancel</button>
                 </div>
-            </form>
+            </div>
         </section>
 
         <section class="title">

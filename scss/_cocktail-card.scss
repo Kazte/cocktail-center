@@ -6,6 +6,8 @@
     background-color: #f9cb16;
     overflow: hidden;
     width: 100%;
+    display: flex;
+    flex-flow: column;
     .cocktail-card-title {
         margin: 10px;
         padding: 5px;
@@ -23,5 +25,10 @@
             line-height: 2rem;
             display: inline;
         }
+    }
+    .cocktail-card-ingredients {
+        padding: 10px;
+        font-size: 1.5rem;
+        list-style: none;
     }
 }
