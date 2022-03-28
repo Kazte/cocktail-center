@@ -1,81 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="./css/style.css" />
+        <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" />
 
-<head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./css/style.css" />
-    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" />
-    <title>Cocktail Center</title>
-</head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css" />
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-<body>
-    <header>
-        <div class="header-left">
-            <h1><a href="#">Cocktail Center</a></h1>
+        <title>Cocktail Center</title>
+    </head>
 
-            <nav>
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Top 10</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
+    <body>
+        <header>
+            <div class="header-left">
+                <h1><a href="#">Cocktail Center</a></h1>
 
-        <div class="header-right">
-            <button class="btn" id="btnNewCocktail">New Cocktail</button>
-            <form id="searchCocktailForm" action="">
-                <input id="searchCocktailInput" type="search" name="Cocktail" class="input" placeholder="Search a Cocktail... " />
-            </form>
-        </div>
-    </header>
-
-    <main>
-        <section id="new-cocktail-panel">
-            <div id="newCocktailForm">
-                <h1> New Cocktail</h1>
-
-                <input class="input" type="text" name="new-cocktail-name" id="newCocktailNameInput" placeholder="New Cocktail Name">
-
-                <textarea class="input" type="text" name="new-cocktail-desc" id="newCocktailDescInput" placeholder="New Cocktail Description"></textarea>
-
-                <ul id="new-cocktail-ingredients-list">
-                    <li class="new-cocktail-ingredient">
-                        <input type="text" name="new-cocktail-ingredient-name" id="newCocktailIngredientNameInput" placeholder="Ingredient Name">
-                        <input type="text" name="new-cocktail-ingredient-measure" id="newCocktailIngredientMeasureInput" placeholder="Ingredient Measure">
-                    </li>
-                </ul>
-
-                <div class="flex-row">
-                    <button class="btn" id="new-cocktail-add-ingredient">+</button>
-                </div>
-
-                <div class="flex-row">
-                    <button class="btn" id="btnSendNewCocktail">Send</button>
-                    <button type="reset" class="btn" id="btnCancelNewCocktail">Cancel</button>
-                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Top 10</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </nav>
             </div>
-        </section>
 
-        <section class="title">
-            <img src="./img/cover.jpg" alt="Cover image">
-            <h1>Weekly Cocktails</h1>
-        </section>
+            <div class="header-right">
+                <button class="btn" id="btnNewCocktail">New Cocktail</button>
+                <form id="searchCocktailForm" action="">
+                    <input id="searchCocktailInput" type="search" name="Cocktail" class="input" placeholder="Search a Cocktail... " />
+                </form>
+            </div>
+        </header>
 
-        <section class="center">
-            <ul id="cocktail-list">
+        <main>
+            <section id="new-cocktail-panel">
+                <div id="newCocktailForm">
+                    <h1>New Cocktail</h1>
 
-            </ul>
-        </section>
-    </main>
+                    <input class="input" type="text" name="new-cocktail-name" id="newCocktailNameInput" placeholder="New Cocktail Name" />
 
-    <footer>
-        <em>Copyright © 2022</em>
-    </footer>
+                    <textarea class="input" type="text" name="new-cocktail-desc" id="newCocktailDescInput" placeholder="New Cocktail Description"></textarea>
 
-    <script type="module" src="./js/app.js"></script>
-</body>
+                    <ul id="new-cocktail-ingredients-list">
+                        <li class="new-cocktail-ingredient">
+                            <input type="text" name="new-cocktail-ingredient-name" id="newCocktailIngredientNameInput" placeholder="Ingredient Name" />
+                            <input type="text" name="new-cocktail-ingredient-measure" id="newCocktailIngredientMeasureInput" placeholder="Ingredient Measure" />
+                        </li>
+                    </ul>
 
+                    <div class="flex-row">
+                        <button class="btn" id="new-cocktail-add-ingredient">+</button>
+                    </div>
+
+                    <div class="flex-row">
+                        <button class="btn" id="btnSendNewCocktail">Send</button>
+                        <button type="reset" class="btn" id="btnCancelNewCocktail">Cancel</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="title">
+                <img src="./img/cover.jpg" alt="Cover image" />
+                <h1>Weekly Cocktails</h1>
+            </section>
+
+            <section class="center">
+                <ul id="cocktail-list"></ul>
+            </section>
+        </main>
+
+        <footer>
+            <em>Copyright © 2022</em>
+        </footer>
+
+        <script type="module" src="./js/app.js"></script>
+    </body>
 </html>

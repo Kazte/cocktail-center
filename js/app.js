@@ -1,8 +1,8 @@
 class Cocktail {
-    name = ""
-    description = ""
-    ingredients = []
-    thumbnail = ""
+    name = "";
+    description = "";
+    ingredients = [];
+    thumbnail = "";
 
     constructor(name, description, ingredients, thumbnail) {
         this.name = name;
@@ -16,8 +16,8 @@ const cocktails = [];
 
 import { data } from "./../data/data.js";
 
-data.cocktails.forEach(cocktail => {
-    const newCocktail = new Cocktail(cocktail.name, cocktail.description, cocktail.ingredients, cocktail.thumbnail)
+data.cocktails.forEach((cocktail) => {
+    const newCocktail = new Cocktail(cocktail.name, cocktail.description, cocktail.ingredients, cocktail.thumbnail);
     cocktails.push(newCocktail);
 });
 
@@ -27,7 +27,7 @@ if (dataFromLocalStorage) {
     let localStored = JSON.parse(localStorage.getItem("customCocktails"));
 
     for (const cocktail of localStored["cocktails"]) {
-        const newCocktail = new Cocktail(cocktail.name, cocktail.description, cocktail.ingredients, cocktail.thumbnail)
+        const newCocktail = new Cocktail(cocktail.name, cocktail.description, cocktail.ingredients, cocktail.thumbnail);
         cocktails.push(newCocktail);
     }
 }
@@ -47,7 +47,7 @@ bntNewCocktail.addEventListener("click", () => {
     const ingredientsList = document.getElementById("new-cocktail-ingredients-list");
     const newIngredientBtn = document.getElementById("new-cocktail-add-ingredient");
 
-    newIngredientBtn.addEventListener("click", e => {
+    newIngredientBtn.addEventListener("click", (e) => {
         if (ingredientsList.children.length > 7) return;
 
         const newIngredientListItem = document.createElement("li");
@@ -56,12 +56,12 @@ bntNewCocktail.addEventListener("click", () => {
         newIngredientListItem.innerHTML = `
                         <input type="text" name="new-cocktail-ingredient-name" id="newCocktailIngredientNameInput" placeholder="Ingredient Name">
                         <input type="text" name="new-cocktail-ingredient-measure" id="newCocktailIngredientMeasureInput" placeholder="Ingredient Measure">
-                        `
+                        `;
 
         const btn = document.createElement("button");
         btn.innerHTML = `x`;
         btn.id = "new-cocktail-delete-ingredient";
-        btn.addEventListener("click", e => {
+        btn.addEventListener("click", (e) => {
             const toRemove = e.target.parentNode;
 
             ingredientsList.removeChild(toRemove);
@@ -70,26 +70,21 @@ bntNewCocktail.addEventListener("click", () => {
         newIngredientListItem.appendChild(btn);
 
         ingredientsList.appendChild(newIngredientListItem);
-    })
+    });
 
-
-
-    newCocktailFormSend.addEventListener('click', (e) => {
-
+    newCocktailFormSend.addEventListener("click", (e) => {
         const newCocktailNameInput = document.getElementById("newCocktailNameInput");
         const newCocktailDescInput = document.getElementById("newCocktailDescInput");
 
-        const ingredients = []
-
+        const ingredients = [];
 
         for (const child of ingredientsList.children) {
-
             const iName = child.children[0].value;
             const iMeasure = child.children[1].value;
 
             if (iName.length <= 0 || iMeasure.length <= 0) return;
 
-            ingredients.push({ "name": iName, "measure": iMeasure });
+            ingredients.push({ name: iName, measure: iMeasure });
         }
 
         if (newCocktailNameInput.value.length > 0 && newCocktailDescInput.value.length > 0) {
@@ -101,38 +96,36 @@ bntNewCocktail.addEventListener("click", () => {
         }
     });
 
-    newCocktailFormReset.addEventListener('click', closeNewCocktailPanel);
+    newCocktailFormReset.addEventListener("click", closeNewCocktailPanel);
 });
 
-
 const searchCocktailForm = document.getElementById("searchCocktailForm");
-searchCocktailForm.addEventListener("submit", e => e.preventDefault());
-searchCocktailForm.addEventListener("search", e => {
+searchCocktailForm.addEventListener("submit", (e) => e.preventDefault());
+searchCocktailForm.addEventListener("search", (e) => {
     const value = e.target.value;
     if (value.length > 0) {
         const cocktailsSearched = searchCockatils(value);
         clearCocktailsFromIndex();
-        cocktailsSearched.forEach(cocktail => {
+        cocktailsSearched.forEach((cocktail) => {
             addCocktailToIndex(cocktail);
         });
-
     } else {
         generateAllCocktails();
     }
-
 });
-
 
 // Functions
 function searchCockatils(name) {
     if (name == null || name == "") return null;
 
-    return cocktails.filter(x => x.name.toLowerCase().includes(name.toLowerCase()));
+    return cocktails.filter((x) => x.name.toLowerCase().includes(name.toLowerCase()));
 }
-
 
 function addNewCocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail) {
     const newCocktail = new Cocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail);
+
+    showCustomToastify("New cocktail added");
+
     saveCocktailToLocalStorage(newCocktail);
     addCocktailToIndex(newCocktail);
     cocktails.push(newCocktail);
@@ -140,9 +133,8 @@ function addNewCocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail
 
 function addCocktailToIndex(cocktail) {
     let newCocktailHTML = document.createElement("li");
-    newCocktailHTML.className = "cocktail-card"
-    newCocktailHTML.innerHTML +=
-        `
+    newCocktailHTML.className = "cocktail-card";
+    newCocktailHTML.innerHTML += `
         <h1 class="cocktail-card-title">${cocktail.name}</h1>
 
         <div class="cocktail-card-desc">
@@ -151,17 +143,17 @@ function addCocktailToIndex(cocktail) {
         </div>
 
         <h1 class="cocktail-card-title">Ingredients</h1>    
-        `
+        `;
 
     let ingredients_ul = document.createElement("ul");
     ingredients_ul.className = "cocktail-card-ingredients";
 
     newCocktailHTML.appendChild(ingredients_ul);
 
-    cocktail.ingredients.forEach(ing => {
+    cocktail.ingredients.forEach((ing) => {
         let newIngredient = document.createElement("li");
         newIngredient.className = "cocktail-card-ingredient";
-        newIngredient.innerText = `${ing.name}: ${ing.measure===""?"Fill with":ing.measure}`;
+        newIngredient.innerText = `${ing.name}: ${ing.measure === "" ? "Fill with" : ing.measure}`;
         ingredients_ul.appendChild(newIngredient);
     });
 
@@ -190,13 +182,11 @@ function closeNewCocktailPanel() {
     newCocktailNameInput.style.backgroundColor = "#ffffff";
 }
 
-function validateNewCocktailForm(e) {
-
-}
+function validateNewCocktailForm(e) {}
 
 function generateAllCocktails() {
     clearCocktailsFromIndex();
-    cocktails.forEach(cocktail => {
+    cocktails.forEach((cocktail) => {
         addCocktailToIndex(cocktail);
     });
 }
@@ -211,9 +201,22 @@ function saveCocktailToLocalStorage(cocktail) {
 
         localStored["cocktails"].push(JSON.parse(stringed));
 
-        localStorage.setItem("customCocktails", JSON.stringify(localStored))
+        localStorage.setItem("customCocktails", JSON.stringify(localStored));
     } else {
         const newToStorage = `{"cocktails":[${stringed}]}`;
         localStorage.setItem("customCocktails", newToStorage);
     }
+}
+
+function showCustomToastify(toastifyText) {
+    Toastify({
+        text: toastifyText,
+        duration: 2500,
+        close: true,
+        gravity: "bottom",
+        position: "right",
+        style: {
+            background: "black",
+        },
+    }).showToast();
 }
