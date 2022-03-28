@@ -127,6 +127,8 @@ function searchCockatils(name) {
 function addNewCocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail) {
     const newCocktail = new Cocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail);
 
+    showCustomToastify("New Cocktail Added");
+
     saveCocktailToLocalStorage(newCocktail);
     addCocktailToIndex(newCocktail);
 
@@ -209,4 +211,18 @@ function saveCocktailToLocalStorage(cocktail) {
         const newToStorage = `{"cocktails":[${stringed}]}`;
         localStorage.setItem("customCocktails", newToStorage);
     }
+}
+
+function showCustomToastify(text) {
+    Toastify({
+        text: text,
+        duration: 2500,
+        close: true,
+        gravity: "bottom",
+        position: "left",
+        style: {
+            background: "black",
+            borderRadius: "5px",
+        },
+    }).showToast();
 }
