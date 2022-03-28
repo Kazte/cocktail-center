@@ -17,7 +17,10 @@ const cocktails = [];
 import { data } from "./../data/data.js";
 
 data.cocktails.forEach((cocktail) => {
-    const newCocktail = new Cocktail(cocktail.name, cocktail.description, cocktail.ingredients, cocktail.thumbnail);
+    const { name, description, ingredients, thumbnail } = cocktail;
+
+    const newCocktail = new Cocktail(name, description, ingredients, thumbnail);
+
     cocktails.push(newCocktail);
 });
 
@@ -124,22 +127,24 @@ function searchCockatils(name) {
 function addNewCocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail) {
     const newCocktail = new Cocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail);
 
-    showCustomToastify("New cocktail added");
-
     saveCocktailToLocalStorage(newCocktail);
     addCocktailToIndex(newCocktail);
+
     cocktails.push(newCocktail);
 }
 
 function addCocktailToIndex(cocktail) {
     let newCocktailHTML = document.createElement("li");
+
+    const { name, description, ingredients, thumbnail } = cocktail;
+
     newCocktailHTML.className = "cocktail-card";
     newCocktailHTML.innerHTML += `
-        <h1 class="cocktail-card-title">${cocktail.name}</h1>
+        <h1 class="cocktail-card-title">${name}</h1>
 
         <div class="cocktail-card-desc">
-            <img src="${cocktail.thumbnail}" alt="Whiskey Sour Thumbnail">
-            <p>${cocktail.description}</p>
+            <img src="${thumbnail}" alt="Whiskey Sour Thumbnail">
+            <p>${description}</p>
         </div>
 
         <h1 class="cocktail-card-title">Ingredients</h1>    
@@ -150,7 +155,7 @@ function addCocktailToIndex(cocktail) {
 
     newCocktailHTML.appendChild(ingredients_ul);
 
-    cocktail.ingredients.forEach((ing) => {
+    ingredients.forEach((ing) => {
         let newIngredient = document.createElement("li");
         newIngredient.className = "cocktail-card-ingredient";
         newIngredient.innerText = `${ing.name}: ${ing.measure === "" ? "Fill with" : ing.measure}`;
@@ -182,8 +187,6 @@ function closeNewCocktailPanel() {
     newCocktailNameInput.style.backgroundColor = "#ffffff";
 }
 
-function validateNewCocktailForm(e) {}
-
 function generateAllCocktails() {
     clearCocktailsFromIndex();
     cocktails.forEach((cocktail) => {
@@ -206,17 +209,4 @@ function saveCocktailToLocalStorage(cocktail) {
         const newToStorage = `{"cocktails":[${stringed}]}`;
         localStorage.setItem("customCocktails", newToStorage);
     }
-}
-
-function showCustomToastify(toastifyText) {
-    Toastify({
-        text: toastifyText,
-        duration: 2500,
-        close: true,
-        gravity: "bottom",
-        position: "right",
-        style: {
-            background: "black",
-        },
-    }).showToast();
 }
