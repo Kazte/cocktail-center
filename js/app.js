@@ -1,10 +1,12 @@
 class Cocktail {
+    id = -1;
     name = "";
     description = "";
     ingredients = [];
     thumbnail = "";
 
-    constructor(name, description, ingredients, thumbnail) {
+    constructor(id, name, description, ingredients, thumbnail) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.ingredients = ingredients;
@@ -12,17 +14,41 @@ class Cocktail {
     }
 }
 
+async function getRandomCocktail() {
+    const resp = await fetch("https://www.thecocktaildb.com/api/json/v1/1/random.php");
+    const data = await resp.json();
+
+    return data["drinks"][0];
+}
+
 const cocktails = [];
 
-import { data } from "./../data/data.js";
+// import { data } from "./../data/data.js";
 
-data.cocktails.forEach((cocktail) => {
-    const { name, description, ingredients, thumbnail } = cocktail;
+for (let i = 0; i < 10; i++) {
+    const cocktail = await getRandomCocktail();
 
-    const newCocktail = new Cocktail(name, description, ingredients, thumbnail);
+    const ingredients = getIngredientsFromJson(cocktail);
+
+    const newCocktail = new Cocktail(cocktail["idDrink"], cocktail["strDrink"], cocktail["strInstructions"], ingredients, cocktail["strDrinkThumb"]);
 
     cocktails.push(newCocktail);
-});
+}
+
+function getIngredientsFromJson(cocktail) {
+    var ing = [];
+
+    for (let index = 1; index <= 15; index++) {
+        var ingredient = cocktail[`strIngredient${index}`];
+
+        if (ingredient != null || ingredient == "") {
+            ing.push({ name: `${cocktail[`strIngredient${index}`]}`, measure: `${cocktail[`strMeasure${index}`] || ""}` });
+        } else {
+            break;
+        }
+    }
+    return ing;
+}
 
 const dataFromLocalStorage = localStorage.getItem("customCocktails") || null;
 
@@ -30,7 +56,7 @@ if (dataFromLocalStorage) {
     let localStored = JSON.parse(localStorage.getItem("customCocktails"));
 
     for (const cocktail of localStored["cocktails"]) {
-        const newCocktail = new Cocktail(cocktail.name, cocktail.description, cocktail.ingredients, cocktail.thumbnail);
+        const newCocktail = new Cocktail(-1, cocktail.name, cocktail.description, cocktail.ingredients, cocktail.thumbnail);
         cocktails.push(newCocktail);
     }
 }
@@ -103,29 +129,67 @@ bntNewCocktail.addEventListener("click", () => {
 });
 
 const searchCocktailForm = document.getElementById("searchCocktailForm");
+
 searchCocktailForm.addEventListener("submit", (e) => e.preventDefault());
-searchCocktailForm.addEventListener("search", (e) => {
-    const value = e.target.value;
+// const searchCocktailBtn = document.getElementById("searchCocktailBtn");
+
+// searchCocktailBtn.addEventListener("click", (e) => {
+//     const searchCocktailInput = document.getElementById("searchCocktailInput");
+//     const value = searchCocktailInput.value;
+//     if (value.length > 0) {
+//         const cocktailsSearched = await searchCockatils(value);
+
+//         clearCocktailsFromIndex();
+
+//         console.log(cocktailsSearched);
+
+//         // cocktailsSearched.forEach((cocktail) => {
+//         //     const ingredients = getIngredientsFromJson(cocktail);
+
+//         //     const newCocktail = new Cocktail(cocktail["idDrink"], cocktail["strDrink"], cocktail["strInstructions"], ingredients, cocktail["strDrinkThumb"]);
+
+//         //     cocktails.push(newCocktail);
+//         // });
+//     } else {
+//         generateAllCocktails();
+//     }
+// });
+
+searchCocktailForm.addEventListener("search", async (e) => {
+    console.log(e);
     if (value.length > 0) {
-        const cocktailsSearched = searchCockatils(value);
+        const cocktailsSearched = await searchCockatils(value);
+
         clearCocktailsFromIndex();
-        cocktailsSearched.forEach((cocktail) => {
-            addCocktailToIndex(cocktail);
-        });
+
+        console.log(cocktailsSearched);
+
+        // cocktailsSearched.forEach((cocktail) => {
+        //     const ingredients = getIngredientsFromJson(cocktail);
+
+        //     const newCocktail = new Cocktail(cocktail["idDrink"], cocktail["strDrink"], cocktail["strInstructions"], ingredients, cocktail["strDrinkThumb"]);
+
+        //     cocktails.push(newCocktail);
+        // });
     } else {
         generateAllCocktails();
     }
 });
 
 // Functions
-function searchCockatils(name) {
+async function searchCockatils(name) {
     if (name == null || name == "") return null;
 
-    return cocktails.filter((x) => x.name.toLowerCase().includes(name.toLowerCase()));
+    // cocktails.filter((x) => x.name.toLowerCase().includes(name.toLowerCase()));
+
+    const resp = await fetch(`www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`);
+    const data = await resp.json();
+
+    return data["drinks"];
 }
 
-function addNewCocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail) {
-    const newCocktail = new Cocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail);
+function addNewCocktail(newCocktailid, newCocktailName, newCocktailDesc, ingredients, thumbnail) {
+    const newCocktail = new Cocktail(newCocktailid, newCocktailName, newCocktailDesc, ingredients, thumbnail);
 
     showCustomToastify("New Cocktail Added");
 
@@ -138,7 +202,7 @@ function addNewCocktail(newCocktailName, newCocktailDesc, ingredients, thumbnail
 function addCocktailToIndex(cocktail) {
     let newCocktailHTML = document.createElement("li");
 
-    const { name, description, ingredients, thumbnail } = cocktail;
+    const { id, name, description, ingredients, thumbnail } = cocktail;
 
     newCocktailHTML.className = "cocktail-card";
     newCocktailHTML.innerHTML += `
@@ -157,12 +221,12 @@ function addCocktailToIndex(cocktail) {
 
     newCocktailHTML.appendChild(ingredients_ul);
 
-    ingredients.forEach((ing) => {
+    for (const ing of ingredients) {
         let newIngredient = document.createElement("li");
         newIngredient.className = "cocktail-card-ingredient";
         newIngredient.innerText = `${ing.name}: ${ing.measure === "" ? "Fill with" : ing.measure}`;
         ingredients_ul.appendChild(newIngredient);
-    });
+    }
 
     cocktail_ul.appendChild(newCocktailHTML);
 }
