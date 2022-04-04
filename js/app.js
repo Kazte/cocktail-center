@@ -28,14 +28,14 @@ const cocktails = [];
 for (let i = 0; i < 10; i++) {
     const cocktail = await getRandomCocktail();
 
-    const ingredients = getIngredientsFromJson(cocktail);
+    const ingredients = await getIngredientsFromJson(cocktail);
 
-    const newCocktail = new Cocktail(cocktail["idDrink"], cocktail["strDrink"], cocktail["strInstructions"], ingredients, cocktail["strDrinkThumb"]);
+    const newCocktail = new Cocktail(cocktail["idDrink"], cocktail["strDrink"], cocktail["strInstructions"], ingredients, cocktail["strDrinkThumb"] + "/preview");
 
     cocktails.push(newCocktail);
 }
 
-function getIngredientsFromJson(cocktail) {
+async function getIngredientsFromJson(cocktail) {
     var ing = [];
 
     for (let index = 1; index <= 15; index++) {
@@ -117,7 +117,7 @@ bntNewCocktail.addEventListener("click", () => {
         }
 
         if (newCocktailNameInput.value.length > 0 && newCocktailDescInput.value.length > 0) {
-            addNewCocktail(newCocktailNameInput.value, newCocktailDescInput.value, ingredients, "./../img/whiskey_sour_thumb.jpg");
+            addNewCocktail(-1, newCocktailNameInput.value, newCocktailDescInput.value, ingredients, "./../img/whiskey_sour_thumb.jpg");
 
             newCocktailNameInput.value = "";
             newCocktailDescInput.value = "";
@@ -131,29 +131,6 @@ bntNewCocktail.addEventListener("click", () => {
 const searchCocktailForm = document.getElementById("searchCocktailForm");
 
 searchCocktailForm.addEventListener("submit", (e) => e.preventDefault());
-// const searchCocktailBtn = document.getElementById("searchCocktailBtn");
-
-// searchCocktailBtn.addEventListener("click", (e) => {
-//     const searchCocktailInput = document.getElementById("searchCocktailInput");
-//     const value = searchCocktailInput.value;
-//     if (value.length > 0) {
-//         const cocktailsSearched = await searchCockatils(value);
-
-//         clearCocktailsFromIndex();
-
-//         console.log(cocktailsSearched);
-
-//         // cocktailsSearched.forEach((cocktail) => {
-//         //     const ingredients = getIngredientsFromJson(cocktail);
-
-//         //     const newCocktail = new Cocktail(cocktail["idDrink"], cocktail["strDrink"], cocktail["strInstructions"], ingredients, cocktail["strDrinkThumb"]);
-
-//         //     cocktails.push(newCocktail);
-//         // });
-//     } else {
-//         generateAllCocktails();
-//     }
-// });
 
 searchCocktailForm.addEventListener("search", async (e) => {
     const value = e.target.value;
@@ -162,15 +139,17 @@ searchCocktailForm.addEventListener("search", async (e) => {
 
         clearCocktailsFromIndex();
 
-        console.log(cocktailsSearched);
+        if (cocktailsSearched.length > 0) {
+            cocktailsSearched.forEach(async (cocktail) => {
+                const ingredients = await getIngredientsFromJson(cocktail);
 
-        // cocktailsSearched.forEach((cocktail) => {
-        //     const ingredients = getIngredientsFromJson(cocktail);
+                const newCocktail = new Cocktail(cocktail["idDrink"], cocktail["strDrink"], cocktail["strInstructions"], ingredients, cocktail["strDrinkThumb"]);
 
-        //     const newCocktail = new Cocktail(cocktail["idDrink"], cocktail["strDrink"], cocktail["strInstructions"], ingredients, cocktail["strDrinkThumb"]);
-
-        //     cocktails.push(newCocktail);
-        // });
+                addCocktailToIndex(newCocktail);
+            });
+        } else {
+            generateAllCocktails();
+        }
     } else {
         generateAllCocktails();
     }
@@ -180,9 +159,9 @@ searchCocktailForm.addEventListener("search", async (e) => {
 async function searchCockatils(name) {
     if (name == null || name == "") return null;
 
-    // cocktails.filter((x) => x.name.toLowerCase().includes(name.toLowerCase()));
+    const url = "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=" + name;
 
-    const resp = await fetch(`www.thecocktaildb.com/api/json/v1/1/search.php?s=${name}`);
+    const resp = await fetch(url);
     const data = await resp.json();
 
     return data["drinks"];
@@ -209,7 +188,7 @@ function addCocktailToIndex(cocktail) {
         <h1 class="cocktail-card-title">${name}</h1>
 
         <div class="cocktail-card-desc">
-            <img src="${thumbnail}" alt="Whiskey Sour Thumbnail">
+            <img src="${thumbnail}" alt="Cocktail Thumbnail">
             <p>${description}</p>
         </div>
 
@@ -224,8 +203,9 @@ function addCocktailToIndex(cocktail) {
     for (const ing of ingredients) {
         let newIngredient = document.createElement("li");
         newIngredient.className = "cocktail-card-ingredient";
-        newIngredient.innerText = `${ing.name}: ${ing.measure === "" ? "Fill with" : ing.measure}`;
+        newIngredient.innerText = `${ing.name}: ${ing.measure}`;
         ingredients_ul.appendChild(newIngredient);
+        console.log(ing);
     }
 
     cocktail_ul.appendChild(newCocktailHTML);
