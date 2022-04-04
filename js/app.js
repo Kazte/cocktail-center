@@ -205,7 +205,6 @@ function addCocktailToIndex(cocktail) {
         newIngredient.className = "cocktail-card-ingredient";
         newIngredient.innerText = `${ing.name}: ${ing.measure}`;
         ingredients_ul.appendChild(newIngredient);
-        console.log(ing);
     }
 
     cocktail_ul.appendChild(newCocktailHTML);
