@@ -156,7 +156,7 @@ searchCocktailForm.addEventListener("submit", (e) => e.preventDefault());
 // });
 
 searchCocktailForm.addEventListener("search", async (e) => {
-    console.log(e);
+    const value = e.target.value;
     if (value.length > 0) {
         const cocktailsSearched = await searchCockatils(value);
 
